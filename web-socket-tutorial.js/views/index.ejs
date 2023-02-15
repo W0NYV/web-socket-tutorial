@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <script src="/socket.io/socket.io.js"></script>
+    </head>
+    <body>
+        <h1>HEY YO !!!</h1>
+        <ul id="messages"></ul>
+        <input id="inputText" type="text">
+        <input id ="sendButton" type="submit">
+
+        <script>
+
+            let socketIO = io();
+
+            let messages = document.getElementById('messages');
+            let button = document.getElementById('sendButton');
+            let inputText = document.getElementById('inputText');
+
+            button.addEventListener('click', () => {
+                let inputMsg = inputText.value;
+
+                if(inputMsg === '') return;
+
+                socketIO.emit('sendMessage', inputMsg);
+                
+                inputText.value = '';
+            });
+
+            socketIO.on('receiveMessage', (msg) => {
+                console.log(msg);
+
+                let li = document.createElement('li');
+                let text = document.createTextNode(msg);
+                li.appendChild(text);
+                messages.appendChild(li);
+            });
+
+        </script>
+    </body>
+</html>
